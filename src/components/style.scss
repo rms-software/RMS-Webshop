@@ -1,0 +1,108 @@
+// Screen sizes
+$size-mobile: 480px;
+$size-tablet: 768px;
+$size-laptop: 1024px;
+$size-desktop: 1200px;
+
+// Background colors
+$color-bg-standard: #eee;
+
+// Foreground colors
+$color-fg-standard: black;
+
+// Button styles
+button {
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  &.cancle, &.confirm {
+    &:not(.disabled):hover {
+      cursor: pointer;
+      opacity: 0.8;
+    }
+  }
+
+  &.cancle {
+    background: #ddd;
+  }
+
+  &.confirm {
+    background: orange;
+    color: white;
+  }
+}
+
+// Prepare the body for our
+// scss
+body,
+html,
+#app {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+table {
+  width: 100%;
+  text-align: left;
+  background: $color-bg-standard;
+  border-collapse: collapse;
+
+  &.clickable {
+    tr {
+      &:hover {
+        background: darken($color-bg-standard, 20);
+        cursor: pointer;
+      }
+
+      &:nth-child(even):hover {
+          background: darken($color-bg-standard, 30);
+      }
+    }
+  }
+
+  tr {
+    th {
+      background: darken($color-bg-standard, 10);
+    }
+
+    td, th {
+      padding: 10px;
+    }
+
+    &:nth-child(even) {
+      background: darken($color-bg-standard, 10);
+    }
+  }
+}
+
+input.form-control {
+  outline: none;
+  border: 1px solid $color-fg-standard;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 1.2em;
+  width: 100%;
+  background: none;
+  color: $color-fg-standard;
+}
