@@ -47,6 +47,13 @@ const getProductList = () => cache_result('getCompanyProducts', async () => {
     return response.data
 })
 
+// api/open/{companyId}/orders
+const placeOrder = async (order) => {
+    const url = `${rms_settings.server_url}/api/open/${rms_settings.company_id}/orders`
+    const response = await axios.post(url, order)
+    return response.data
+}
+
 export default {
     getCompanyInfo,
     getProductList,

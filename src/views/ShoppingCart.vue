@@ -1,6 +1,6 @@
 <template>
   <Restrictor :width="800">
-    <div id="shopping-cart">
+    <div id="shopping-cart" v-if="cart.length > 0">
       <div id="header">
         <h3>Winkelwagen</h3>
         <div>{{ cart.length }} Items</div>
@@ -37,6 +37,10 @@
       <button class="btn confirm" @click="askPlaceOrder">Bestellen</button>
     </div>
 
+    <div v-else>
+      Geen producten in uw winkelmand
+    </div>
+
     <Modal ref="orderModal" title="Bestelling plaatsen">
       <div>Totaal bedrag: € {{ totalPrice.toFixed(2) }}</div>
 
@@ -55,7 +59,7 @@
       </div>
 
       <br />
-      <button class="btn confirm">Bestelling plaatsen</button>
+      <button class="btn confirm" @click="placeOrder">Bestelling plaatsen</button>
     </Modal>
   </Restrictor>
 </template>
@@ -64,6 +68,9 @@
 // Import components
 import Restrictor from "@/components/Restrictor"; 
 import Modal from "@/components/Modal";
+
+// Import rms connector
+import rms from "@/rms_connector.js";
 
 export default {
   components: {
@@ -92,8 +99,27 @@ export default {
       this.$refs.orderModal.isOpen = true;
     },
 
-    placeOrder() {
-      
+    async placeOrder() {
+      // print a list of all the items in the basket
+      const cart = JSON.parse(localStorage.getItem("basket") || "[]");
+
+      // Register the order on RMS
+      await this.registerOrderOnRMS(cart);
+
+      // Clear the cart
+      localStorage.setItem("basket", [])
+
+      // Reload cart
+      this.cart = JSON.parse(localStorage.getItem("basket") || "[]");
+
+      // Close popup
+      this.$refs.orderModal.isOpen = false;
+
+      alert("Bestelling is geplaatst");
+    },
+
+    async registerOrderOnRMS(orders) {
+      // TODO: await rms.placeOrder();
     }
   }
 }
