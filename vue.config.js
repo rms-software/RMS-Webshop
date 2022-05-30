@@ -1,5 +1,5 @@
 module.exports = {
-    publicPath: process.env.NODE_ENV === 'production' ? '/bakkerij-adriaans/' : '/',
+    publicPath: process.env.NODE_ENV === 'production' ? '/client-adriaans/' : '/',
     devServer: {
       disableHostCheck: true
     }
