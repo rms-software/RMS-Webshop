@@ -6,6 +6,7 @@ const rms_settings = {
         email: 'bakkerijadriaans@gmail.com',
         tel: '0624939954',
     },
+    
     server_url: process.env.NODE_ENV === 'production' ? 'https://rhino-ms.herokuapp.com' : 'http://localhost:5000',
     company_id: 2
 }
@@ -57,5 +58,6 @@ const placeOrder = async (order) => {
 export default {
     getCompanyInfo,
     getProductList,
-    testConnection
+    testConnection,
+    placeOrder
 }

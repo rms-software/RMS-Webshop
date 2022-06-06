@@ -49,13 +49,15 @@
       <!-- form for email, name, adress, phone number -->
       <div id="user-data-form">
         <label for="email">E-mail</label><br />
-        <input type="email" class="form-control" id="email" /><br /><br />
+        <input v-model="orderPersonData.email" type="email" class="form-control" id="email" /><br /><br />
         <label for="name">Naam</label><br />
-        <input type="text" class="form-control" id="name" /><br /><br />
+        <input v-model="orderPersonData.name" type="text" class="form-control" id="name" /><br /><br />
         <label for="address">Adres</label><br />
-        <input type="text" class="form-control" id="address" /><br /><br />
+        <input v-model="orderPersonData.address" type="text" class="form-control" id="address" /><br /><br />
         <label for="phone">Telefoonnummer</label><br />
-        <input type="text" class="form-control" id="phone" />
+        <input v-model="orderPersonData.phoneNumber" type="text" class="form-control" id="phone" /><br /><br />
+        <label for="delivery">Bezorgen</label><br />
+        <input v-model="orderPersonData.delivery" type="checkbox" class="" id="delivery" />
       </div>
 
       <br />
@@ -80,6 +82,13 @@ export default {
 
   data: () => ({
     cart: [],
+    orderPersonData: {
+      email: '',
+      name: '',
+      address: '',
+      phoneNumber: '',
+      delivery: false
+    }
   }),
 
   computed: {
@@ -119,7 +128,35 @@ export default {
     },
 
     async registerOrderOnRMS(orders) {
-      // TODO: await rms.placeOrder();
+      const data = this.orderPersonData;
+
+      const orderItems = [];
+
+      // Loop over items in cart
+      this.cart.forEach(cartItem => {
+
+        // Loop over the amount of products
+        for (let i = 0; i < cartItem.amount; i++) {
+          orderItems.push({
+            productId: cartItem.product.id,
+            settings: {}
+          });
+        }
+      });
+
+      console.log(orderItems);
+
+      rms.placeOrder({
+        customerDetails: {
+          address: data.address,
+          email: data.email,
+          name: data.name,
+          phoneNumber: data.phoneNumber,
+          delivery: '' + data.delivery
+        },
+
+        orderItems
+      });
     }
   }
 }
@@ -156,7 +193,7 @@ export default {
 }
 
 #user-data-form {
-    input {
+    input.form-control {
       width: 200px;
     }
   }
