@@ -1,20 +1,23 @@
 # Bakkerij Adriaans
 Webshop, connecting to RMS 1.0.0 Beta
 
-## Project setup
-```
-npm install
-```
+## Todo
+webshop
+- [ ] winkelwagen verwijder bij 0
+- [ ] bezorg datum lijst vullen
+- [ ] homepage bestel van de dag veranderd na update winkelwagen
+- [ ] homepage bestel van de dag
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+RMS
+- Order confirmatie email tekst fixen
+- no-reply email gebruiken
+- Fix image compression issue
+- Order status kunnen veranderen
+- Order details kunnen inzien
+- Order kunnen editen
+- transip database gebruiken
 
-### Compiles and minifies for production
-```
-npm run build
-```
+1.9.0 update:
+webshop
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+RMS

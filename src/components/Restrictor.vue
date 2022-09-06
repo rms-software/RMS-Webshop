@@ -1,9 +1,16 @@
 <template>
-  <div id="wrapper">
-    <div id="restrictor" :style="`max-width: ${width}px`">
+  <div>
+    <div id="wrapper" v-if="enabled">
+      <div id="restrictor" :style="`max-width: ${width}px`">
+        <slot></slot>
+      </div>
+    </div>
+
+    <div v-else>
       <slot></slot>
     </div>
   </div>
+  
 </template>
 
 <script>
@@ -12,6 +19,11 @@ export default {
     width: {
       type: Number,
       default: 800,
+    },
+
+    enabled: {
+      type: Boolean,
+      default: false,
     }
   }
 }

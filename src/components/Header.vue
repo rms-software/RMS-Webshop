@@ -16,6 +16,7 @@
                             :style="`width: ${linkWidth}px;`"
                             :to="link.to">
                     {{ link.name }}
+                    <span class="notifier" v-if="link.name === 'Winkelwagen' && basketCount > 0">{{ basketCount }}</span>
                 </router-link>
             </span>
         </div>
@@ -27,12 +28,14 @@
                         :style="`width: ${linkWidth}px;`"
                         :to="link.to">
                 {{ link.name }}
+                <span class="notifier" v-if="link.name === 'Winkelwagen' && basketCount > 0">{{ basketCount }}</span>
             </router-link>
         </div>
 
         <div class="mobile-navigator" v-if="navLinks.length > 0">
             <button class="btn" @click="toggleBurger">
                 <unicon name="bars" fill="black"></unicon>
+                <span class="notifier" v-if="basketCount > 0">{{ basketCount }}</span>
             </button>
 
             <div class="link-list" v-if="burgerOpen">
@@ -42,6 +45,7 @@
                              :key="link.to"
                              :to="link.to">
                     {{ link.name }}
+                    <span class="notifier" v-if="link.name === 'Winkelwagen' && basketCount > 0">{{ basketCount }}</span>
                 </router-link>
             </div>
         </div>
@@ -74,12 +78,21 @@ export default {
     },
 
     data: () => ({
-        burgerOpen: false
+        burgerOpen: false,
+        basketCount: 0
     }),
+
+    mounted() {
+        const that = this;
+        that.basketCount = JSON.parse(localStorage.getItem("basket") || "[]").length;
+        setInterval(() => {
+            that.basketCount = JSON.parse(localStorage.getItem("basket") || "[]").length;
+        });
+    },
 
     methods: {
         toggleBurger() {
-            this.burgerOpen = !this.burgerOpen
+            this.burgerOpen = !this.burgerOpen;
         }
     }
 }
@@ -208,5 +221,18 @@ export default {
             }
         }
     }
+}
+
+.notifier {
+    background: red;
+    color: white;
+    font-weight: bold;
+    width: 25px;
+    height: 25px;
+    border-radius: 100%;
+    display: inline-block;
+    position: relative;
+    top: -10px;
+
 }
 </style>

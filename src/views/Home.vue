@@ -1,167 +1,148 @@
 <template>
   <div>
-    <OverlayPopup ref="orderCount">
-      <div class="order-count-wrapper">
-        <div class="order-count-announcement">
-          U staat op het punt om '{{ activeProduct.name }}'
-          toe te voegen aan uw winkelmand
-        </div>
-
-        <div class="order-count-counter">
-          <span style="margin-right: 20px;">Hoeveelheid: </span>
-          
-          <input type="number" v-model="productCount" />
-        </div>
-
-        <div class="order-count-counter">
-          <span style="margin-right: 20px;">Minder pittig: </span>
-          
-          <input type="checkbox" v-model="lessSpicy" />
-        </div>
-
-        <span>
-          <button class="btn cancle" style="margin-right: 20px;" @click="$refs.orderCount.show = false">
-            ANNULEER
-          </button>
-
-          <button class="btn confirm" @click="addProductsToBasket">
-            TOEVOEGEN € {{ (productCount * activeProduct.price).toFixed(2) }}
-          </button>
-        </span>
-      </div>
-    </OverlayPopup>
-
-    <OverlayPopup ref="basketView">
-      <div class="content-wrapper">
-        <div class="content">
-          <div class="order-count-wrapper">
-            <div class="order-count-announcement">
-              Winkelmand • <span class="price">€ {{ basketTotal.toFixed(2) }}</span>
-            </div>
-            <table class="basket-list">
-              <thead>
-                <tr>
-                  <th>Product</th>
-                  <th>Aantal</th>
-                  <th>Prijs totaal</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <tr v-for="(entry, index) in Object.entries(basket)" :key="index">
-                  <td>
-                    {{ entry[0] }}
-                  </td>
-                  <td>
-                    {{ entry[1].count }}
-                  </td>
-                  <td>
-                    € {{ (entry[1].count * entry[1].price).toFixed(2) }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-            <span>
-              <span>Ophaal datum&nbsp;&nbsp;&nbsp;</span>
-              <input v-model="pickupDate" type="date" style="width: 120px; margin-bottom: 20px;" />
-            </span>
-
-            <span>
-              <button :class="{'btn confirm': true }" style="margin-right: 20px;" @click="$refs.basketView.show = false">
-                VERDER WINKELEN
-              </button>
-
-              <button :disabled="pickupDate === ''" :class="{'btn confirm': true, 'disabled': pickupDate === ''}" @click="$refs.basketView.show = false;$refs.orderPlacer.show = true">
-                BESTELLEN € {{ basketTotal.toFixed(2) }}
-              </button>
-            </span>
-          </div>
-        </div>
-      </div>
-    </OverlayPopup>
-
-    <OverlayPopup ref="orderPlacer">
-      <div class="content-wrapper">
-        <div class="content">
-          <div class="order-count-wrapper">
-            <div class="order-count-announcement">
-              Bestellen
-            </div>
-
-            <div style="margin-bottom: 40px">
-              Kies Uw methode om te bestellen:
-            </div>
-
-            <div class="order-methods">
-              <a rel="noopener" :href="`https://api.whatsapp.com/send?phone=31610184265&app=DWWSite&text=${GetOrderMessage()}`" target="_blank" class="order-method-card">
-                <unicon :name="'whatsapp'" />
-              </a>
-              <a rel="noopener" :href="`mailto:john@dewitworstenbrood.nl?subject=bestelling&body=${GetOrderMessage()}`" target="_blank" class="order-method-card">
-                <unicon :name="'envelope'" />
-              </a>
-              <!--
-              <span class="order-method-card">
-                <unicon :name="'phone'" />
-              </span>
-              <a href="http://m.me/De-Wit-Worstenbrood-100184555272377/" target="_blank" class="order-method-card">
-                <unicon :name="'facebook'" />
-              </a>
-              -->
-            </div>
-
-            <span style="margin-top: 40px">
-              <button class="btn cancle" style="margin-right: 20px;" @click="$refs.orderPlacer.show = false">
-                TERUG
-              </button>
-            </span>
-          </div>
-        </div>
-      </div>
-    </OverlayPopup>
-
     <div style="margin: 50px;flex-grow: 1;">
       <div class="content-wrapper">
         <div class="content">
           <span class="center" style="padding: 20px 0px">
             <h1>Bakkerij Adriaans</h1>
-            <h3 style="margin-top: -30px;">Lorem Ipsum</h3>
+            <h3>Lekker tot de laatste kruimel… 🍞</h3>
 
             <p>
-              lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium optio officiis consequatur, facilis sapiente ipsum commodi eos ullam tenetur iste corrupti nam quas nobis illo id odit natus nihil temporibus?
+              Mijn naam is Tom Adriaans, ik ben 19 jaar en mijn bakkerij zit gevestigd in Zijtaart. Ik bak wekelijks vers brood, broodjes en  lekkernijen. Ik bezorg het ook! Bakkerij Adriaans begonnen in 2020, altijd bakken met een lach!
             </p>
           </span>
 
           <br><br><br>
 
-          <!-- <div>
-            <OrderList :products=products @order="orderItem" />
+          <div id="cards">
+            <ProductCard
+              v-for="product in highlightedProducts"
+              :key="product.id"
+              :product="product"
+              @order="askAddToCart(product)"
+            />
           </div>
 
-          <button class="btn confirm" @click="$refs.basketView.show = true" v-if="Object.entries(basket).length > 0">
-            BEKIJK WINKELMAND
-          </button> -->
+          <br /><br />
+          <div style="text-align: center">
+            <button class="btn confirm" @click="$router.push('/producten')">Meer bestellen</button>
+          </div>
         </div>
       </div>
-    </div>    
+    </div>  
+    
+    <!-- Modal for putting in shopping cart -->
+    <Modal
+      :title="`${orderProduct ? orderProduct.name : ''} bestellen`"
+      ref="modalShoppingCart"
+    >
+      <br />
+      <label for="amount">Aantal</label><br />
+      <input
+        v-model="orderCount"
+        type="number"
+        class="form-control"
+        id="order-amount"
+      />
+
+      <br /><br /><br />
+
+      <button type="button" class="btn confirm" @click="putItemInBasket">
+        In winkelwagen stoppen
+      </button>
+    </Modal>
   </div>
 </template>
 
 <script>
 import OverlayPopup from '@/components/OverlayPopup'
+
+import RMS from '../rms_connector.js'
+
+import ProductCard from "@/components/ProductCard.vue"
+import Modal from "@/components/Modal.vue";
 //import OrderList from '@/components/OrderList'
 
 export default {
   components: {
     //OrderList,
-    OverlayPopup
+    OverlayPopup,
+    ProductCard,
+    Modal
+  },
+
+  data: () => ({
+    basketTotal: 0,
+    activeProduct: {},
+    basket: {},
+
+    products: [
+      
+    ],
+    orderCount: 1,
+    orderProduct: null,
+    highlightedProducts: []
+  }),
+
+  async mounted() {
+    if (window.highlightedProducts) {
+      this.highlightedProducts = window.highlightedProducts;
+      return
+    }
+
+    const productHighlightOptions = await RMS.getProductList();
+    const dailyString = (new Date()).toDateString();
+
+    const hashCode1 = (dailyString + "1").hashCode() % productHighlightOptions.length;
+    const hashCode2 = (dailyString + "2").hashCode() % (productHighlightOptions.length - 1);
+    const hashCode3 = (dailyString + "3").hashCode() % (productHighlightOptions.length - 2);
+
+    this.highlightedProducts = [
+      productHighlightOptions.splice(hashCode1, 1)[0],
+      productHighlightOptions.splice(hashCode2, 1)[0],
+      productHighlightOptions.splice(hashCode3, 1)[0]
+    ];
+
+    window.highlightedProducts = this.highlightedProducts;
   },
 
   methods: {
+    putItemInBasket() {
+      // Store the amount and the item in
+      // localstorage as basket
+      const basket = JSON.parse(localStorage.getItem("basket") || "[]");
+      
+      basket.push({
+        product: this.orderProduct,
+        amount: this.orderCount,
+      });
+
+      // Condense the duplicate basket items into one item
+      const condensedBasket = basket.reduce((acc, item) => {
+        const existingItem = acc.find(
+          (basketItem) => basketItem.product.id === item.product.id
+        );
+
+        if (existingItem)
+          existingItem.amount = Number(existingItem.amount) + Number(item.amount);
+        else
+          acc.push(item);
+
+        return acc;
+      }, []);
+
+      localStorage.setItem("basket", JSON.stringify(condensedBasket));
+
+      // Close the modal again
+      this.$refs.modalShoppingCart.isOpen = false;
+    },
+    
+    askAddToCart(product) {
+      this.orderCount = 1;
+      this.orderProduct = product;
+      this.$refs.modalShoppingCart.isOpen = true;
+    },
+
     orderItem(productId) {
       this.productCount = 1;
       this.lessSpicy = false;
@@ -205,59 +186,7 @@ export default {
 
       return message
     }
-  },
-
-  data: () => ({
-    basketTotal: 0,
-    lessSpicy: false,
-    pickupDate: '',
-    activeProduct: {},
-    basket: {
-    },
-    productCount: 1,
-    products: [
-      {
-        image: 'products/worstenbroodje.jpg',
-        name: 'Worstenbroodjes',
-        description: [
-            "Normaal standaard worstenbroodje zijn altijd vers gebakken uit de oven, en handgemaakt door een hobbybakker.   Ze zijn in te vriezen als u ze heeft opgehaald.",
-            "Houd je niet van pittig bestel dan de mildere versie."
-        ],
-        weight: '90 - 95 gram',
-        price: 1,
-      },
-      {
-        image: 'products/worstenbroodje-klein.png',
-        name: 'Worstenbroodjes klein',
-        description: [
-            "Deze worstenbroodjes zijn de kleinere variant van onze standaard worstenbroodjes, ze zijn ongeveer de helft in gewicht, en dus ook de helft goedkoper. Ze zijn in te vriezen als u ze heeft opgehaald.",
-            "Houd je niet van pittig bestel dan de mildere versie."
-        ],
-        weight: '40 - 45 gram',
-        price: 0.5,
-      },
-      {
-        image: 'products/worstenbol.jpg',
-        name: 'Witbollen',
-        description: [
-            "Deze worstenbroodjes zijn de bol vormige variant van onze standaard pittige worstenbroodjes, ze zijn ongeveer de helft in gewicht, en dus ook de helft goedkoper.",
-            "hou je niet van pittig? dan kun je ook in de bestelling aangeven dat je het worstenbroodje wat milder wilt hebben."
-        ],
-        weight: '40 - 45 gram',
-        price: 0.5,
-      },
-      {
-        image: 'products/worstenbrood-xxxl.png',
-        name: 'Worstenbrood XXXL',
-        description: [
-            "Op verzoek maken we ook XXXL worstenbroodjes. Deze worstenbroodjes zijn rond de 200 gram dus bijna een maaltijd. Leuk om cadeau te geven.",
-            "Het is ook mogelijk om er een cijfer in te laten bakken."
-        ],
-        weight: '200 gram',
-        price: 2.5,
-      }
-    ]
-  })
+  }
 }
 </script>
 
@@ -273,6 +202,12 @@ export default {
     display: inline-block;
     text-align: left;
   }
+}
+
+#cards {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .order-count-wrapper {

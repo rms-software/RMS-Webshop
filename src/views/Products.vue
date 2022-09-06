@@ -1,7 +1,7 @@
 <template>
   <div class="products-wrapper">
     <div class="products">
-      <input type="text" class="form-control" placeholder="zoeken..." v-model="searchQuery" />
+      <input type="text" class="form-control mb-3" placeholder="zoeken..." v-model="searchQuery" />
       <ProductList :products="filteredProducts" @order="askAddToCart" />
     </div>
 
@@ -31,7 +31,7 @@
 <script>
 // Import components
 import DoubleSection from "@/components/DoubleSection";
-import ProductList from "@/components/ProductList";
+import ProductList from "@/components/ProductList.vue";
 import Modal from "@/components/Modal.vue";
 
 // Import RMS connector
@@ -47,8 +47,8 @@ export default {
   data: () => ({
     products: [],
     orderCount: 1,
-    searchQuery: '',
     orderProduct: null,
+    searchQuery: '',
   }),
 
   async mounted() {

@@ -1,32 +1,49 @@
 <template>
-  <Restrictor :width="800">
+  <div>
+    <Restrictor :width="800" enabled>
     <div id="shopping-cart" v-if="cart.length > 0">
       <div id="header">
         <h3>Winkelwagen</h3>
         <div>{{ cart.length }} Items</div>
       </div>
 
-      <hr />
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th class="desktop">Aantal</th>
+            <th class="desktop">Prijs</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in cart" :key="item.product.id" class="cart-item">
+            <td class="desktop">
+              <b>{{ item.product.name }}</b> <br /><br />
+            </td>
+            <td class="desktop">
+              <div class="btn-group">
+                <button @click="deleteItem(item.product)" class="btn btn-outline-primary">Delete</button>
+                <input class="form-control outline-primary form-control-sm" type="number" v-model="item.amount" @input="updateBasket" />
+              </div>
+              
+            </td>
+            <td class="desktop">€ {{ item.product.basePrice.toFixed(2) }}</td>
 
-      <div id="cart-list">
-        <span class="thead">Producten</span>
-        <span class="thead">Prijs</span>
-        <span class="thead">Totaal</span>
+            <td class="mobile">
+              <b>{{ item.product.name }}</b> <br /><br />
+              <div class="btn-group">
+                <button @click="deleteItem(item.product)" class="btn btn-outline-primary">Delete</button>
+                <input class="form-control outline-primary form-control-sm" type="number" v-model="item.amount" @input="updateBasket" />
+              </div>
+              
+              <br />
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-        <template v-for="item in cart" class="cart-item">
-          <span :key="item.id" class="overview">
-            <img :src="item.product.image" class="item-pic" />
-            <div>
-              <b>{{ item.product.name }}</b><br />
-              {{ item.amount }}x
-            </div>
-          </span>
-          <span :key="item.id">€ {{ item.product.basePrice.toFixed(2) }}</span>
-          <span :key="item.id">€ {{ (item.amount * item.product.basePrice).toFixed(2) }}</span>
-        </template>
-      </div>
+      <br><br><br><br>
 
-      <hr />
       <div id="footer">
         <h3>Totaal</h3>
         <div>€ {{ totalPrice.toFixed(2) }}</div>
@@ -40,8 +57,9 @@
     <div v-else>
       Geen producten in uw winkelmand
     </div>
+  </Restrictor>
 
-    <Modal ref="orderModal" title="Bestelling plaatsen">
+  <Modal ref="orderModal" title="Bestelling plaatsen">
       <div>Totaal bedrag: € {{ totalPrice.toFixed(2) }}</div>
 
       <br />
@@ -57,19 +75,27 @@
         <label for="phone">Telefoonnummer</label><br />
         <input v-model="orderPersonData.phoneNumber" type="text" class="form-control" id="phone" /><br /><br />
         <label for="delivery">Bezorgen</label><br />
-        <input v-model="orderPersonData.delivery" type="checkbox" class="" id="delivery" />
+        <input v-model="orderPersonData.delivery" type="checkbox" class="" id="delivery" /><br /><br />
+        
+        <label for="delivery" v-if="orderPersonData.delivery">Bezorg datum</label><br />
+        <select v-model="orderPersonData.deliveryDate" class="form-control" v-if="orderPersonData.delivery">
+          <option v-for="day in deliveryDays" :key="day">
+            Zaterdag {{ day }}
+          </option>
+        </select>
       </div>
 
       <br />
       <button class="btn confirm" @click="placeOrder">Bestelling plaatsen</button>
     </Modal>
-  </Restrictor>
+  </div>
 </template>
 
 <script>
 // Import components
-import Restrictor from "@/components/Restrictor"; 
+import Restrictor from "@/components/Restrictor.vue"; 
 import Modal from "@/components/Modal";
+import NumberCounter from "@/components/NumberCounter";
 
 // Import rms connector
 import rms from "@/rms_connector.js";
@@ -77,7 +103,8 @@ import rms from "@/rms_connector.js";
 export default {
   components: {
     Restrictor,
-    Modal
+    Modal,
+    NumberCounter
   },
 
   data: () => ({
@@ -87,8 +114,10 @@ export default {
       name: '',
       address: '',
       phoneNumber: '',
-      delivery: false
-    }
+      delivery: false,
+      deliveryDate: ''
+    },
+    deliveryDays: [],
   }),
 
   computed: {
@@ -101,9 +130,38 @@ export default {
 
   mounted() {
     this.cart = JSON.parse(localStorage.getItem("basket") || "[]");
+    this.deliveryDays = this.saterdaysInFuture(10);
   },
 
   methods: {
+    saterdaysInFuture(numDays) {
+      // Get an array of dates
+      // representing the next x saturdays in the future
+      var dates = [];
+      var today = new Date();
+      var nextSaturday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + (6 - today.getDay()));
+      for (var i = 0; i < numDays; i++) {
+        dates.push(new Date(nextSaturday.getFullYear(), nextSaturday.getMonth(), nextSaturday.getDate() + (i * 7)));
+      }
+
+      // Format the dates like 30/Aug/2022
+      var formattedDates = [];
+      for (var i = 0; i < dates.length; i++) {
+        formattedDates.push(dates[i].getDate() + "/" + (dates[i].getMonth() + 1) + "/" + dates[i].getFullYear());
+      }
+      return formattedDates;
+    },
+
+    deleteItem(item) {
+      console.log(item)
+
+      // Remove the item based on its id
+      this.cart = this.cart.filter(cartItem => cartItem.product.id !== item.id);
+      
+      // Update the local storage
+      this.updateBasket();
+    },
+
     askPlaceOrder() {
       this.$refs.orderModal.isOpen = true;
     },
@@ -127,6 +185,15 @@ export default {
       alert("Bestelling is geplaatst");
     },
 
+    updateBasket() {
+      // Remove cart items that have 0
+      this.cart = this.cart.filter(item => item.amount > 0);
+
+      // Save to local storage
+      const newJson = JSON.stringify(this.cart);
+      localStorage.setItem("basket", newJson);
+    },
+
     async registerOrderOnRMS(orders) {
       const data = this.orderPersonData;
 
@@ -136,12 +203,11 @@ export default {
       this.cart.forEach(cartItem => {
 
         // Loop over the amount of products
-        for (let i = 0; i < cartItem.amount; i++) {
-          orderItems.push({
-            productId: cartItem.product.id,
-            settings: {}
-          });
-        }
+        orderItems.push({
+          productId: cartItem.product.id,
+          settings: {},
+          count: cartItem.amount
+        });
       });
 
       console.log(orderItems);
@@ -152,7 +218,8 @@ export default {
           email: data.email,
           name: data.name,
           phoneNumber: data.phoneNumber,
-          delivery: '' + data.delivery
+          delivery: '' + data.delivery,
+          deliveryDate: data.deliveryDate
         },
 
         orderItems
@@ -169,26 +236,15 @@ export default {
   align-items: center;
 }
 
-#cart-list {
-  display: grid;
-  grid-template-columns: auto 100px 100px;
-  
-  .thead {
-    color: gray;
-  }
 
-  .overview {
-    display: grid;
-    grid-template-columns: 160px auto;
-  }
+.item-pic {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  display: block;
 
-  .item-pic {
-    width: 150px;
-    display: block;
-
-    @media screen and (max-width: 600px) {
-      display: none;
-    }
+  @media screen and (max-width: 600px) {
+    display: none;
   }
 }
 

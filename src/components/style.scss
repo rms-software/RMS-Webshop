@@ -10,6 +10,20 @@ $color-bg-standard: #eee;
 // Foreground colors
 $color-fg-standard: black;
 
+.desktop {
+
+  @media screen and (max-width: $size-tablet) {
+    display: none;
+  }
+}
+
+.mobile {
+
+  @media screen and (min-width: $size-tablet - 1) {
+    display: none;
+  }
+}
+
 // Button styles
 button {
   border: none;
@@ -83,7 +97,7 @@ table {
 
   tr {
     th {
-      background: darken($color-bg-standard, 10);
+      background: darken($color-bg-standard, 1);
     }
 
     td, th {
@@ -91,12 +105,16 @@ table {
     }
 
     &:nth-child(even) {
-      background: darken($color-bg-standard, 10);
+      background: darken($color-bg-standard, 1);
+    }
+
+    &:nth-child(odd) {
+      background: lighten($color-bg-standard, 5);
     }
   }
 }
 
-input.form-control {
+input.form-control, select.form-control {
   outline: none;
   border: 1px solid $color-fg-standard;
   border-radius: 5px;
@@ -105,4 +123,37 @@ input.form-control {
   width: 100%;
   background: none;
   color: $color-fg-standard;
+}
+
+.form-control-sm {
+  width: 50%;
+  height: 10px !important;
+  padding: 5px !important;
+}
+
+.btn-group {
+  input {
+    padding: 23px !important;
+    border-radius: 0 5px 5px 0;
+  }
+}
+
+input.outline-primary {
+  border: 1px solid black !important;
+}
+
+.btn-outline-primary {
+  border-color: black;
+  color: black;
+  font-weight: normal;
+}
+
+.btn-outline-primary:hover, .btn-outline-primary:focus, .btn-outline-primary:active {
+  border-color: black;
+  color: black;
+  font-weight: normal;
+}
+
+.btn-outline-primary:focus, .btn-outline-primary:active {
+  background-color: #eee;
 }

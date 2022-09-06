@@ -4,10 +4,10 @@
       <Header
         :logo="companyInfo.companyLogo"
         :navLinks="navLinks"
-        :linkWidth="120"
+        :linkWidth="140"
       />
 
-      <div style="margin: 50px; flex-grow: 1">
+      <div id="view-wrapper">
         <router-view />
       </div>
 
@@ -90,6 +90,11 @@ export default {
 
 <style lang="scss">
 @import "@/components/style.scss";
+
+#view-wrapper {
+  margin: 50px 10px;
+  flex-grow: 1
+}
 
 #connection-error {
   text-align: center;

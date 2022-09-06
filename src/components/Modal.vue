@@ -37,12 +37,14 @@ export default {
     #modal {
         position: absolute;
         background: white;
-        width: 280px;
-        left: calc(50% - 150px);
+        width: calc(100vw - 40px);
+        left: 10px;
         top: 40px;
         border-radius: 8px;
         padding: 20px;
         text-align: left;
+        max-height: calc(100vh - 120px);
+        overflow: auto;
 
         #header {
             display: flex;

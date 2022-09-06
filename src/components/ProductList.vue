@@ -1,5 +1,6 @@
 <template>
   <div class="order-list">
+    <br />
     <div v-for="(product, index) in products" :key="index">
         <DoubleSection>
             <p slot="left" class="product-image-wrapper">
@@ -16,7 +17,7 @@
                 </div>
 
                 <div class="description">
-                    {{ product.description }}
+                    {{ noNull(product.description)  }}
                 </div>
 
                 <div>
@@ -27,7 +28,6 @@
 
         <br />
         <hr style="color: white"/>
-        <br /><br /><br />
     </div>
     
   </div>
@@ -46,6 +46,15 @@ export default {
 
     components: {
         DoubleSection
+    },
+
+    methods: {
+        noNull(input) {
+            if (input === null || input === "null")
+                return "";
+
+            return input;
+        }
     }
 }
 </script>
