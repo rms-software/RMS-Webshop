@@ -1,23 +1,11 @@
-# Bakkerij Adriaans
+# RMS Webshop template
 Webshop, connecting to RMS 1.0.0 Beta
 
-## Todo
-webshop
-- [ ] winkelwagen verwijder bij 0
-- [ ] bezorg datum lijst vullen
-- [ ] homepage bestel van de dag veranderd na update winkelwagen
-- [ ] homepage bestel van de dag
+## How to create a new instance of the webshop
 
-RMS
-- Order confirmatie email tekst fixen
-- no-reply email gebruiken
-- Fix image compression issue
-- Order status kunnen veranderen
-- Order details kunnen inzien
-- Order kunnen editen
-- transip database gebruiken
-
-1.9.0 update:
-webshop
-
-RMS
+ - Clone this repository using `git clone https://github.com/rms-software/client-adriaans .` in some folder
+ - Install node dependancies using `npm i`
+ - Run local version by using `npm run serve`
+ - Have the RMS server running localy on port 5000 (or edit `rms_settings.server_url` in `rms_connector.js`)
+ - Fill in company_id into `rms_settings.company_id`
+ - Fill in socials in `rms_settings.socials`
