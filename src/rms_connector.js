@@ -40,6 +40,7 @@ const settings_dewit = {
 
 const settings_adriaans = {
     delivery: false,
+    home_banner: 'https://cdn.discordapp.com/attachments/375936269907263489/1023691001874878534/unknown.png',
 
     socials: {
         facebook: 'BakkerijAdriaans',
@@ -58,7 +59,7 @@ const settings_adriaans = {
     company_id: 2
 }
 
-const rms_settings = settings_dewit;
+const rms_settings = settings_adriaans;
 
 const cache = {}
 
