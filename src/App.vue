@@ -4,7 +4,6 @@
       <Header
         :logo="companyInfo.companyLogo"
         :navLinks="navLinks"
-        :linkWidth="140"
       />
 
       <div id="view-wrapper">
@@ -36,10 +35,12 @@ export default {
 
   async mounted() {
     this.rmsConnection = await RMS.testConnection();
-    console.log(this.rmsConnection);
     
     this.companyInfo = await RMS.getCompanyInfo();
     document.title = this.companyInfo.companyName;
+
+    // set favicon
+    document.getElementById('favicon').href = this.companyInfo.companyLogo;
     
   },
 
@@ -49,7 +50,7 @@ export default {
     navLinks: [
       {
         name: 'Home',
-        to: '/home'
+        to: '/'
       },
       {
         name: 'Producten',

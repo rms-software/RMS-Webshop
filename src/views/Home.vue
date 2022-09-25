@@ -4,12 +4,10 @@
       <div class="content-wrapper">
         <div class="content">
           <span class="center" style="padding: 20px 0px">
-            <h1>Bakkerij Adriaans</h1>
-            <h3>Lekker tot de laatste kruimel… 🍞</h3>
+            <h1>{{ companyInfo.companyName }}</h1>
+            <h3>{{ RMS.settings.extra_info.slogan }}</h3>
 
-            <p>
-              Mijn naam is Tom Adriaans, ik ben 19 jaar en mijn bakkerij zit gevestigd in Zijtaart. Ik bak wekelijks vers brood, broodjes en  lekkernijen. Ik bezorg het ook! Bakkerij Adriaans begonnen in 2020, altijd bakken met een lach!
-            </p>
+            <p v-html="RMS.settings.extra_info.introduction"></p>
           </span>
 
           <br><br><br>
@@ -75,13 +73,15 @@ export default {
     basketTotal: 0,
     activeProduct: {},
     basket: {},
+    companyInfo: {},
 
     products: [
       
     ],
     orderCount: 1,
     orderProduct: null,
-    highlightedProducts: []
+    highlightedProducts: [],
+    RMS
   }),
 
   async mounted() {
@@ -104,6 +104,8 @@ export default {
     ];
 
     window.highlightedProducts = this.highlightedProducts;
+
+    this.companyInfo = await RMS.getCompanyInfo();
   },
 
   methods: {

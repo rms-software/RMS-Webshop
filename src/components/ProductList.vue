@@ -3,8 +3,8 @@
     <br />
     <div v-for="(product, index) in products" :key="index">
         <DoubleSection>
-            <p slot="left" class="product-image-wrapper">
-            <img :src="product.image" class="product-image" :alt="product.name + ' product image'" />
+            <p slot="left" class="product-image-wrapper" style="display: flex; align-items: center; height: 100%">
+                <img :src="product.image" class="product-image" :alt="product.name + ' product image'" />
             </p>
 
             <div slot="right" class="product-info">
@@ -13,12 +13,10 @@
                 </div>
 
                 <div class="weight">
-                    {{ product.weight }} • <span class="price">€ {{ product.basePrice.toFixed(2) }}</span> per stuk
+                    {{ product.weight }} • <span class="price">€ {{ product.basePrice.toFixed(2) }}</span>
                 </div>
 
-                <div class="description">
-                    {{ noNull(product.description)  }}
-                </div>
+                <div class="description" v-html="nl2br(noNull(product.description))"></div>
 
                 <div>
                     <button class="btn" @click="$emit('order', product)">BESTELLEN € {{ product.basePrice.toFixed(2) }} </button>
@@ -54,6 +52,10 @@ export default {
                 return "";
 
             return input;
+        },
+
+        nl2br(input) {
+            return input.replace(/\n/g, '<br />');
         }
     }
 }

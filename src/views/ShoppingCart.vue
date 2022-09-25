@@ -68,21 +68,30 @@
       <div id="user-data-form">
         <label for="email">E-mail</label><br />
         <input v-model="orderPersonData.email" type="email" class="form-control" id="email" /><br /><br />
+        
         <label for="name">Naam</label><br />
         <input v-model="orderPersonData.name" type="text" class="form-control" id="name" /><br /><br />
+        
         <label for="address">Adres</label><br />
         <input v-model="orderPersonData.address" type="text" class="form-control" id="address" /><br /><br />
+        
         <label for="phone">Telefoonnummer</label><br />
         <input v-model="orderPersonData.phoneNumber" type="text" class="form-control" id="phone" /><br /><br />
-        <label for="delivery">Bezorgen</label><br />
-        <input v-model="orderPersonData.delivery" type="checkbox" class="" id="delivery" /><br /><br />
         
-        <label for="delivery" v-if="orderPersonData.delivery">Bezorg datum</label><br />
-        <select v-model="orderPersonData.deliveryDate" class="form-control" v-if="orderPersonData.delivery">
-          <option v-for="day in deliveryDays" :key="day">
-            Zaterdag {{ day }}
-          </option>
-        </select>
+        <label for="comment">Opmerking</label><br />
+        <textarea v-model="orderPersonData.comment" id="comment"></textarea><br /><br />
+        
+        <template v-if="rms.settings.delivery">
+          <label for="delivery">Bezorgen</label><br />
+          <input v-model="orderPersonData.delivery" type="checkbox" class="" id="delivery" /><br /><br />        
+          
+          <label for="delivery" v-if="orderPersonData.delivery">Bezorg datum</label><br />
+          <select v-model="orderPersonData.deliveryDate" class="form-control" v-if="orderPersonData.delivery">
+            <option v-for="day in deliveryDays" :key="day">
+              Zaterdag {{ day }}
+            </option>
+          </select>
+        </template>
       </div>
 
       <br />
@@ -114,10 +123,12 @@ export default {
       name: '',
       address: '',
       phoneNumber: '',
+      comment: '',
       delivery: false,
       deliveryDate: ''
     },
     deliveryDays: [],
+    rms
   }),
 
   computed: {
@@ -219,7 +230,8 @@ export default {
           name: data.name,
           phoneNumber: data.phoneNumber,
           delivery: '' + data.delivery,
-          deliveryDate: data.deliveryDate
+          deliveryDate: data.deliveryDate,
+          comment: data.comment
         },
 
         orderItems
