@@ -12,7 +12,12 @@
       </div>
   
       <div id="header-links" :class="{ closed: !opened }">
-        <router-link v-for="link in navLinks" @click="opened = false" :to="link.to" :key="link.name">{{ link.name }}</router-link>
+        <router-link v-for="link in navLinks" @click="opened = false" :to="link.to" :key="link.name">
+          {{ link.name }}
+          <span class="count" v-if="link.name === 'Winkelwagen'">
+            {{ basketCount }}
+          </span>
+        </router-link>
       </div>
     </div>
   </template>
@@ -20,8 +25,17 @@
   <script>
   export default {
     data: () => ({
-      opened: false
+      opened: false,
+      basketCount: 0,
     }),
+
+    mounted() {
+      const that = this;
+      that.basketCount = JSON.parse(localStorage.getItem("basket") || "[]").length;
+      setInterval(() => {
+        that.basketCount = JSON.parse(localStorage.getItem("basket") || "[]").length;
+      });
+    },
   
     props: {
         logo: {
@@ -102,6 +116,18 @@
     }
   
     #header-links {
+      .count {
+        background: red;
+        color: white;
+        width: 25px;
+        height: 25px;
+        position: relative;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 100%;
+      }
+
       a {
         color: #666;
         text-decoration: none;
