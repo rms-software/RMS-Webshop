@@ -1,5 +1,7 @@
 <template>
   <div class="products-wrapper">
+    <br />
+
     <div class="products">
       <input type="text" class="form-control mb-3" placeholder="zoeken..." v-model="searchQuery" />
       <ProductList :products="filteredProducts" @order="askAddToCart" />

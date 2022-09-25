@@ -93,7 +93,6 @@ export default {
 @import "@/components/style.scss";
 
 #view-wrapper {
-  margin: 50px 10px;
   flex-grow: 1
 }
 

@@ -3,7 +3,7 @@
     <a
       class="contact-item"
       rel="noopener"
-      :href="`https://www.facebook.com/${socials.facebook}`"
+      :href="`https://www.facebook.com/${socials.facebookLink}`"
       target="_blank"
     >
       <svg

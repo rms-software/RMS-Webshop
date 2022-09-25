@@ -2,6 +2,8 @@ import axios from 'axios'
 
 const settings_dewit = {
     delivery: false,
+    company_id: 1,
+    home_banner: 'https://cdn.discordapp.com/attachments/375936269907263489/1023686750008250368/unknown.png',
 
     socials: {
         facebook: 'De Wit Worstenbrood',
@@ -34,7 +36,6 @@ const settings_dewit = {
     },
     
     server_url: process.env.NODE_ENV === 'production' ? 'https://rhino-ms.herokuapp.com' : 'http://localhost:5000',
-    company_id: 1
 }
 
 const settings_adriaans = {

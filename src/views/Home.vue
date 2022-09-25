@@ -1,12 +1,18 @@
 <template>
   <div>
+    <div id="banner" :style="`background: url('${RMS.settings.home_banner}');background-repeat: no-repeat;background-size: cover;`">
+      <div id="banner-content">
+        <div id="banner-title">{{ companyInfo.companyName }}</div>
+        <div id="banner-subtitle">{{ RMS.settings.extra_info.slogan }}</div>
+      </div>
+
+      <img src="@/assets/wave.svg" alt="wave" class="wave">
+    </div>
+
     <div style="margin: 50px;flex-grow: 1;">
       <div class="content-wrapper">
         <div class="content">
           <span class="center" style="padding: 20px 0px">
-            <h1>{{ companyInfo.companyName }}</h1>
-            <h3>{{ RMS.settings.extra_info.slogan }}</h3>
-
             <p v-html="RMS.settings.extra_info.introduction"></p>
           </span>
 
@@ -195,6 +201,44 @@ export default {
 
 <style lang="scss">
 @import "@/components/style.scss";
+
+#banner {
+    width: 100vw;
+    height: 430px;
+    
+    position: relative;
+    margin-top: 10px;
+
+    #banner-content {
+      background: rgba(#eee, 0.8);
+      display: inline-block;
+      position: absolute;
+      border-radius: 20px;
+      top: 150px;
+      left: calc(50vw - 200px);
+      width: 400px;
+      padding: 20px;
+      text-align: left;
+      max-width: 76vw;
+
+      @media screen and (max-width: 650px) {
+        left: 20px;
+        width: calc(100vw - 80px);
+        max-width: 100vw;
+      }
+
+      #banner-title {
+        font-size: xx-large;
+      }
+    }
+
+    .wave {
+      width: 120vw;
+      position: absolute;
+      bottom: -1px;
+      left: -10px;
+    }
+  }
 
 .content-wrapper {
   text-align: center;

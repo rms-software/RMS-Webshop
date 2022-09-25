@@ -12,7 +12,7 @@
       </div>
   
       <div id="header-links" :class="{ closed: !opened }">
-        <router-link v-for="link in navLinks" @click="opened = false" :to="link.to">{{ link.name }}</router-link>
+        <router-link v-for="link in navLinks" @click="opened = false" :to="link.to" :key="link.name">{{ link.name }}</router-link>
       </div>
     </div>
   </template>

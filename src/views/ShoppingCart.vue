@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="wrapper">
+    <br />
     <Restrictor :width="800" enabled>
     <div id="shopping-cart" v-if="cart.length > 0">
       <div id="header">
@@ -261,8 +262,12 @@ export default {
 }
 
 #user-data-form {
-    input.form-control {
-      width: 200px;
-    }
+  input.form-control {
+    width: 200px;
   }
+}
+
+.wrapper {
+  margin: 20px;
+}
 </style>
