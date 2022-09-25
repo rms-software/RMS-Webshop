@@ -1,238 +1,120 @@
 <template>
-    <span>
-        <div class="header">
-            <span id="logo" v-if="logo">
-                <img :src="logo" alt="logo" />
-            </span>
-            
-            <span v-if="title" id="title">
-                {{ title }}
-            </span>
-
-            <span id="navbar">
-                <router-link v-for="link in navLinks"
-                             class="router-link"
-                            :key="link.to"
-                            :style="`width: ${linkWidth}px;`"
-                            :to="link.to">
-                    {{ link.name }}
-                    <span class="notifier" v-if="link.name === 'Winkelwagen' && basketCount > 0">{{ basketCount }}</span>
-                </router-link>
-            </span>
-        </div>
-
-        <div class="navigator">
-            <router-link v-for="link in navLinks"
-                         class="router-link"
-                        :key="link.to"
-                        :style="`width: ${linkWidth}px;`"
-                        :to="link.to">
-                {{ link.name }}
-                <span class="notifier" v-if="link.name === 'Winkelwagen' && basketCount > 0">{{ basketCount }}</span>
-            </router-link>
-        </div>
-
-        <div class="mobile-navigator" v-if="navLinks.length > 0">
-            <button class="btn" @click="toggleBurger">
-                <unicon name="bars" fill="black"></unicon>
-                <span class="notifier" v-if="basketCount > 0">{{ basketCount }}</span>
-            </button>
-
-            <div class="link-list" v-if="burgerOpen">
-                <router-link v-for="link in navLinks"
-                             class="router-link"
-                             @click.native="burgerOpen = false"
-                             :key="link.to"
-                             :to="link.to">
-                    {{ link.name }}
-                    <span class="notifier" v-if="link.name === 'Winkelwagen' && basketCount > 0">{{ basketCount }}</span>
-                </router-link>
-            </div>
-        </div>
-    </span>
-    
-</template>
-
-<script>
-export default {
-    props: {
-        title: {
-            type: String,
-            default: null
-        },
-
-        logo: {
-            type: String,
-            default: null
-        },
-
-        navLinks: {
-            type: Array,
-            default: () => []
-        },
-
-        linkWidth: {
-            type: Number,
-            default: 40
-        }
-    },
-
+    <div id="header">
+      <div id="logo-burger">
+        <img :src="logo" alt="logo" id="logo" style="width: 80px;">
+  
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-menu-2" width="50" height="50" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round" @click="toggleMenu ">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+          <line x1="4" y1="6" x2="20" y2="6" />
+          <line x1="4" y1="12" x2="20" y2="12" />
+          <line x1="4" y1="18" x2="20" y2="18" />
+        </svg>
+      </div>
+  
+      <div id="header-links" :class="{ closed: !opened }">
+        <router-link v-for="link in navLinks" @click="opened = false" :to="link.to">{{ link.name }}</router-link>
+      </div>
+    </div>
+  </template>
+  
+  <script>
+  export default {
     data: () => ({
-        burgerOpen: false,
-        basketCount: 0
+      opened: false
     }),
-
-    mounted() {
-        const that = this;
-        that.basketCount = JSON.parse(localStorage.getItem("basket") || "[]").length;
-        setInterval(() => {
-            that.basketCount = JSON.parse(localStorage.getItem("basket") || "[]").length;
-        });
-    },
-
-    methods: {
-        toggleBurger() {
-            this.burgerOpen = !this.burgerOpen;
+  
+    props: {
+        logo: {
+          type: String,
+          default: null
+        },
+  
+        navLinks: {
+          type: Array,
+          default: () => []
         }
+      },
+  
+    methods: {
+      toggleMenu() {
+        this.opened = !this.opened;
+      }
     }
-}
-</script>
-
-
-<style scoped lang="scss">
-@import "./style.scss";
-
-.header {
-    background: $color-bg-standard;
+  };
+  </script>
+  
+  <style scoped lang="scss">
+  @import "@/neu-morphism.scss";
+  
+  #header {
+    background: #eee;
+    padding: 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 0;
-
-    @media only screen and (max-width: $size-tablet) {
-        & {
-            justify-content: space-around;
-        }
-    }
-
-    #logo > img {
-        height: 100px;
-        padding-right: 20px;
-        margin-left: 40px;
-    }
-
-    #title {
-        font-size: 20px;
-        font-weight: 20px;
-        color: $color-fg-standard;
-    }
-
-    #navbar {
-        margin-right: 40px;
-        display: none;
-
-        @media only screen and (min-width: $size-tablet) {
-            & {
-                display: inline;
-            }
-        }
-
-        .router-link {
-            color: $color-fg-standard;
-            text-decoration: none;
-            padding: 20px 5px;
-            display: inline-block;
-            text-align: center;
-
-            &:hover {
-                background: rgba(0,0,0,0.1);
-            }
-
-            &.router-link-exact-active {
-                background: rgba(0,0,0,0.05);
-            }
-        }
-    }
-}
-
-.navigator {
-    background: $color-bg-standard;
-    padding-left: 40px;
-    display: flex;
-    align-items: center;
-    display: none;
-
-    @media only screen and (max-width: $size-tablet) and (min-width: $size-mobile) {
-        & {
-            display: block;
-        }
-    }
-
-    .router-link {
-        color: $color-fg-standard;
-        text-decoration: none;
-        padding: 20px 5px;
-        display: inline-block;
-        text-align: center;
-
-        &:hover {
-            background: rgba(0,0,0,0.1);
-        }
-
-        &.router-link-exact-active {
-            background: rgba(0,0,0,0.05);
-        }
-    }
-}
-
-.mobile-navigator {
-    background: $color-bg-standard;
-    padding-left: 40px;
-    display: flex;
-    align-items: center;
-    display: block;
-
-    @media only screen and (min-width: $size-mobile) {
-        display: none;
-    }
-
-    .btn {
-        width: calc(100% - 30px);
-        text-align: center;
-    }
-
-    .link-list {
-        display: grid;
-
-        .router-link {
-            color: $color-fg-standard;
-            text-decoration: none;
-            padding: 20px 5px;
-            display: block;
-            text-align: center;
-            width: calc(100% - 40px);
-
-            &:hover {
-                background: rgba(0,0,0,0.1);
-            }
-
-            &.router-link-exact-active {
-                background: rgba(0,0,0,0.05);
-            }
-        }
-    }
-}
-
-.notifier {
-    background: red;
-    color: white;
-    font-weight: bold;
-    width: 25px;
-    height: 25px;
-    border-radius: 100%;
-    display: inline-block;
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2), 0 3px 20px 0 rgba(0, 0, 0, 0.19);
     position: relative;
-    top: -10px;
-
-}
-</style>
+  
+    #logo-burger {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-left: 50px;
+  
+      img {
+        display: inline;
+  
+        @media screen and (max-width: 650px) {
+          display: none;
+        }
+      }
+  
+      svg {
+        margin-left: 20px;
+        display: none;
+  
+        @media screen and (max-width: 650px) {
+          display: inline;
+        }
+      }
+    }
+  
+    @media screen and (max-width: 650px) {
+      display: grid;
+      justify-content: center;
+      padding: 10px;
+      margin-left: -60px;
+  
+      #header-links {
+        display: grid;
+        width: 100%;
+  
+        &.closed {
+          display: none;
+        }
+  
+        a {
+          width: 50vw;
+          margin-left: calc(25vw - 30px);
+        }
+      }
+    }
+  
+    #header-links {
+      a {
+        color: #666;
+        text-decoration: none;
+        padding: 10px 20px;
+        font-size: 18px;
+  
+        &.router-link-exact-active {
+          background: rgb(204, 159, 97);
+          color: white;
+          border-radius: 50px;
+          @extend .neu-morphism-btn;
+        }
+      }
+    }
+  }
+  </style>
