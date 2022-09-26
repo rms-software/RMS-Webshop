@@ -14,7 +14,7 @@
       <div id="header-links" :class="{ closed: !opened }">
         <router-link v-for="link in navLinks" @click="opened = false" :to="link.to" :key="link.name">
           {{ link.name }}
-          <span class="count" v-if="link.name === 'Winkelwagen'">
+          <span class="count" v-if="link.name === 'Winkelwagen' && basketCount > 0">
             {{ basketCount }}
           </span>
         </router-link>
