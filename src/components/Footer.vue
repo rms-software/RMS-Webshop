@@ -136,6 +136,7 @@ export default {
   padding: 20px 10px;
   position: relative;
   margin-top: 10px;
+  z-index: -1000;
 
   a {
     color: black;
