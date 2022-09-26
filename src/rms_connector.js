@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+const FORCE_PRODUCTION_ENV = false;
+
 const settings_dewit = {
     delivery: false,
     company_id: 1,
@@ -8,7 +10,7 @@ const settings_dewit = {
     socials: {
         facebook: 'De Wit Worstenbrood',
         facebookLink: 'De-Wit-Worstenbrood-100184555272377',
-        email: 'bakkerijadriaans@gmail.com',
+        email: 'john@dewitworstenbrood.nl',
         tel: '31610184265',
     },
 
@@ -35,7 +37,7 @@ const settings_dewit = {
         `
     },
     
-    server_url: process.env.NODE_ENV === 'production' ? 'https://rhino-ms.herokuapp.com' : 'http://localhost:5000',
+    server_url: process.env.NODE_ENV === 'production' || FORCE_PRODUCTION_ENV ? 'https://rhino-ms.herokuapp.com' : 'http://localhost:5000',
 }
 
 const settings_adriaans = {
@@ -55,7 +57,7 @@ const settings_adriaans = {
         `
     },
     
-    server_url: process.env.NODE_ENV === 'production' ? 'https://rhino-ms.herokuapp.com' : 'http://localhost:5000',
+    server_url: process.env.NODE_ENV === 'production' || FORCE_PRODUCTION_ENV ? 'https://rhino-ms.herokuapp.com' : 'http://localhost:5000',
     company_id: 2
 }
 
