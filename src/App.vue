@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" :class="`${theme == 'halloween' ? 'app-halloween' : ''}`">
     <template id="connection-wrapper" v-if="rmsConnection">
       <Header
         :logo="companyInfo.companyLogo"
@@ -47,6 +47,7 @@ export default {
   data: () => ({
     companyInfo: {},
     rmsConnection: true,
+    theme,
     navLinks: [
       {
         name: 'Home',

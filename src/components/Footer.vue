@@ -1,5 +1,7 @@
 <template>
   <div id="footer">
+    <Restrictor>
+      <div>
     <a
       class="contact-item"
       rel="noopener"
@@ -109,13 +111,20 @@
     <br />
 
     <div class="contact-item">&nbsp;&nbsp;&nbsp;Version: {{ version }}</div>
+    </div></Restrictor>
   </div>
 </template>
   
   <script>
 import { version } from "@/../package";
 
+import Restrictor from "@/components/Restrictor.vue";
+
 export default {
+  components: {
+    Restrictor
+  },
+
   props: {
     socials: {
       type: Object,
@@ -129,7 +138,7 @@ export default {
 };
 </script>
   
-  <style scoped lang="scss">
+<style scoped lang="scss">
 #footer {
   background: #eee;
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2), 0 3px 20px 0 rgba(0, 0, 0, 0.19);

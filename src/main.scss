@@ -1,0 +1,108 @@
+body:has(.app-halloween) {
+    background: #222;
+    color: orange;
+
+    img.wave {
+        filter: brightness(0.135);
+    }
+
+    button {
+        color: black !important;
+    }
+
+    #header {
+        background: #000 !important;
+
+        a {
+            color: white !important;
+        }
+
+        a.router-link-exact-active {
+            color: black !important;
+        }
+
+        .icon-tabler {
+            stroke: orange !important;
+        }
+
+        .count {
+            background: orange !important;
+        }
+    }
+
+    #footer {
+        background: #000 !important;
+        color: orange !important;
+
+        a {
+            color: orange !important;
+        }
+
+        svg {
+            fill: orange !important;
+        }
+    }
+
+    #card {
+        background: #000 !important;
+        color: orange !important;
+    }
+
+    #banner-content {
+        background: #222B !important;
+    }
+
+    #modal-wrapper {
+        background: #FFF4 !important;
+
+        #modal {
+            background: #000 !important;
+            color: orange !important;
+        }
+    }
+
+    input, input:focus {
+        border-color: orange !important;
+        color: orange !important;
+        background: black !important;
+    }
+
+    textarea, textarea:focus {
+        background: black !important;
+        border-color: orange !important;
+        color: orange !important;
+    }
+
+    .price {
+        color: white !important;
+    }
+
+    #shopping-cart {
+        #header, #footer {
+            background: #222 !important;
+        }
+    }
+
+    table {
+
+        tr:nth-child(even) {
+            background: #111 !important;
+        }
+        
+        tr:nth-child(odd) {
+            background: #1b1b1b !important;
+        }
+
+        th {
+            background: #000 !important;
+        }
+
+        .btn-group {
+            button {
+                background: #000 !important;
+                color: orange !important;
+                border-color: orange !important;
+            }
+        }
+    }
+}

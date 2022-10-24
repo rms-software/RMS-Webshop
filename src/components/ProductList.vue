@@ -1,7 +1,7 @@
 <template>
   <div class="order-list">
     <br />
-    <div v-for="(product, index) in products" :key="index">
+    <div v-for="(product, index) in products" :key="index" class="product-list-item">
         <DoubleSection>
             <p slot="left" class="product-image-wrapper" style="display: flex; align-items: center; height: 100%">
                 <img :src="product.image" class="product-image" :alt="product.name + ' product image'" />
@@ -24,7 +24,6 @@
             </div>
         </DoubleSection>
 
-        <br />
         <hr style="color: white"/>
     </div>
     
@@ -70,6 +69,11 @@ export default {
         border-radius: 20px;
         filter: drop-shadow(0px 5px 4px #00000060);
     }
+}
+
+.product-list-item {
+    margin-bottom: 100px;
+    height: calc(100% - 30px);
 }
 
 .product-info {

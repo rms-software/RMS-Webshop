@@ -6,6 +6,10 @@ const settings_dewit = {
     delivery: false,
     company_id: 1,
     home_banner: 'https://cdn.discordapp.com/attachments/375936269907263489/1023686750008250368/unknown.png',
+    
+    special_events: {
+        halloween: { startAt: Infinity }
+    },
 
     socials: {
         facebook: 'De Wit Worstenbrood',
@@ -41,8 +45,15 @@ const settings_dewit = {
 }
 
 const settings_adriaans = {
-    delivery: false,
+    delivery: true,
     home_banner: 'https://cdn.discordapp.com/attachments/375936269907263489/1023691001874878534/unknown.png',
+
+    special_events: {
+        halloween: {
+            startAt: 24,
+            home_banner: 'https://media.discordapp.net/attachments/485859146558865408/1034205576076472320/unknown.png'
+        }
+    },
 
     socials: {
         facebook: 'BakkerijAdriaans',
@@ -64,6 +75,21 @@ const settings_adriaans = {
 const rms_settings = settings_adriaans;
 
 const cache = {}
+
+// Calculate what theme we should use
+window.theme = null;
+
+{
+    // If the current date is between startAt and 31 oct
+    const { halloween } = rms_settings.special_events
+    if (halloween) {
+        const currentDay = new Date().getDate()
+        if (currentDay >= halloween.startAt && currentDay <= 31) {
+            theme = 'halloween'
+            rms_settings.home_banner = halloween.home_banner
+        }
+    }
+}
 
 const cache_result = async (name, getter) => {
     if (cache[name]) {

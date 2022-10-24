@@ -8,6 +8,8 @@ import Products from '@/views/Products'
 import Reviews from '@/views/Reviews'
 import ShoppingCart from '@/views/ShoppingCart'
 
+import "./main.scss"
+
 import VueGtag from "vue-gtag";
 
 import {

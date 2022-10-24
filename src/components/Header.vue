@@ -1,7 +1,7 @@
 <template>
     <div id="header">
       <div id="logo-burger">
-        <img :src="logo" alt="logo" id="logo" style="width: 80px;">
+        <img :src="theme == 'halloween' ? imageHalloween : logo" alt="logo" id="logo" style="width: 80px;">
   
         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-menu-2" width="50" height="50" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round" @click="toggleMenu ">
           <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -27,7 +27,9 @@
     data: () => ({
       opened: false,
       basketCount: 0,
-    }),
+      theme: theme,
+      imageHalloween: 'https://media.discordapp.net/attachments/375936269907263489/1034188289734889544/Untitled.png'
+}),
 
     mounted() {
       const that = this;
@@ -110,7 +112,7 @@
   
         a {
           width: 50vw;
-          margin-left: calc(25vw - 30px);
+          margin-left: calc(25vw - 60px);
         }
       }
     }
@@ -135,10 +137,9 @@
         font-size: 18px;
   
         &.router-link-exact-active {
-          background: rgb(204, 159, 97);
+          background: orange;
           color: white;
           border-radius: 50px;
-          @extend .neu-morphism-btn;
         }
       }
     }

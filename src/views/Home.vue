@@ -12,11 +12,42 @@
     <div style="margin: 50px;flex-grow: 1;">
       <div class="content-wrapper">
         <div class="content">
+
+          <div v-if="theme == 'halloween' && products.filter(x => x.name.includes('Halloweenbrood')).length > 0">
+            <h1>Halloween brood</h1>
+
+            <div style="text-align: left;">
+
+              <DoubleSection>
+                <template #right>
+                  <b>Tijdelijk beschikbaar</b> Halloween brood <br />
+                  beschikbaar tot 31 oktober. <br />
+                  Bestel nu! <br /> <br />
+
+                  <button
+                    class="btn confirm"
+                    @click="askAddToCart(products.filter(x => x.name.includes('Halloweenbrood'))[0])"
+                  >
+                    Bestel nu
+                  </button>
+                </template>
+                <template #left>
+                  <img id="special-bread-image" :src="products.filter(x => x.name.includes('Halloweenbrood'))[0].image" />
+                </template>
+              </DoubleSection>
+            </div>
+          </div>
+
+          <br /><br /><br />
+
+          <h1>Welkom op mijn website:</h1>
           <span class="center" style="padding: 20px 0px">
             <p v-html="RMS.settings.extra_info.introduction"></p>
           </span>
 
           <br><br><br>
+
+          <h1>Brood van de dag:</h1>
 
           <div id="cards">
             <ProductCard
@@ -65,6 +96,7 @@ import RMS from '../rms_connector.js'
 
 import ProductCard from "@/components/ProductCard.vue"
 import Modal from "@/components/Modal.vue";
+import DoubleSection from "@/components/DoubleSection.vue";
 //import OrderList from '@/components/OrderList'
 
 export default {
@@ -72,7 +104,8 @@ export default {
     //OrderList,
     OverlayPopup,
     ProductCard,
-    Modal
+    Modal,
+    DoubleSection
   },
 
   data: () => ({
@@ -80,6 +113,7 @@ export default {
     activeProduct: {},
     basket: {},
     companyInfo: {},
+    theme: theme,
 
     products: [
       
@@ -91,30 +125,40 @@ export default {
   }),
 
   async mounted() {
-    if (window.highlightedProducts) {
-      this.highlightedProducts = window.highlightedProducts;
-      return
-    }
+    await this.loadPage();
+  },
 
-    const productHighlightOptions = await RMS.getProductList();
-    const dailyString = (new Date()).toDateString();
-
-    const hashCode1 = (dailyString + "1").hashCode() % productHighlightOptions.length;
-    const hashCode2 = (dailyString + "2").hashCode() % (productHighlightOptions.length - 1);
-    const hashCode3 = (dailyString + "3").hashCode() % (productHighlightOptions.length - 2);
-
-    this.highlightedProducts = [
-      productHighlightOptions.splice(hashCode1, 1)[0],
-      productHighlightOptions.splice(hashCode2, 1)[0],
-      productHighlightOptions.splice(hashCode3, 1)[0]
-    ];
-
-    window.highlightedProducts = this.highlightedProducts;
-
-    this.companyInfo = await RMS.getCompanyInfo();
+  beforeRouteUpdate() {
+    console.log('route updated')
+    this.loadPage();
   },
 
   methods: {
+    async loadPage() {
+      this.companyInfo = await RMS.getCompanyInfo();
+      const productHighlightOptions = await RMS.getProductList();
+      this.products = JSON.parse(JSON.stringify(productHighlightOptions));
+
+      if (window.highlightedProducts) {
+        this.highlightedProducts = window.highlightedProducts;
+        return
+      }
+
+      const dailyString = (new Date()).toDateString();
+
+      const hashCode1 = (dailyString + "1").hashCode() % productHighlightOptions.length;
+      const hashCode2 = (dailyString + "2").hashCode() % (productHighlightOptions.length - 1);
+      const hashCode3 = (dailyString + "3").hashCode() % (productHighlightOptions.length - 2);
+
+      this.highlightedProducts = [
+        productHighlightOptions.splice(hashCode1, 1)[0],
+        productHighlightOptions.splice(hashCode2, 1)[0],
+        productHighlightOptions.splice(hashCode3, 1)[0]
+      ];
+
+      window.highlightedProducts = this.highlightedProducts;
+    },
+
     putItemInBasket() {
       // Store the amount and the item in
       // localstorage as basket
@@ -201,6 +245,16 @@ export default {
 
 <style lang="scss">
 @import "@/components/style.scss";
+
+#special-bread-image {
+  width: 80%;
+  margin-right: 10%;
+  margin-left: 10%;
+  max-height: 400px;
+  object-fit: cover;
+  object-position: 50% 30%;
+  margin-bottom: 50px;
+}
 
 #banner {
     width: 100vw;
