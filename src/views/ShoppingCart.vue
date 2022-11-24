@@ -223,9 +223,10 @@ export default {
       });
 
       console.log(orderItems);
+      
+      const formData = new FormData();
 
-      rms.placeOrder({
-        customerDetails: {
+      formData.append("userData", JSON.stringify({
           address: data.address,
           email: data.email,
           name: data.name,
@@ -233,10 +234,12 @@ export default {
           delivery: '' + data.delivery,
           deliveryDate: data.deliveryDate,
           comment: data.comment
-        },
+      }));
 
-        orderItems
-      });
+      formData.append("orderData", JSON.stringify(orderItems));
+      formData.append("orderDate", new Date().toISOString().replace("T", " ").replace(/\.\d+/g, "").replace("Z", ""));
+
+      rms.placeOrder(formData);
     }
   }
 }

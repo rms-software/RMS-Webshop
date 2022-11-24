@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const FORCE_PRODUCTION_ENV = false;
+const FORCE_PRODUCTION_ENV = true;
 
 const settings_dewit = {
     delivery: false,
@@ -68,8 +68,8 @@ const settings_adriaans = {
         `
     },
     
-    server_url: process.env.NODE_ENV === 'production' || FORCE_PRODUCTION_ENV ? 'https://rhino-ms.herokuapp.com' : 'http://localhost:5000',
-    company_id: 2
+    server_url: process.env.NODE_ENV === 'production' || FORCE_PRODUCTION_ENV ? 'https://rmsapi.bakkerijadriaans.nl' : 'http://localhost:5000',
+    company_id: 3
 }
 
 const rms_settings = settings_adriaans;
@@ -80,11 +80,12 @@ const cache = {}
 window.theme = null;
 
 {
-    // If the current date is between startAt and 31 oct
+    // If the current date is between startAt and 31 october
     const { halloween } = rms_settings.special_events
     if (halloween) {
         const currentDay = new Date().getDate()
-        if (currentDay >= halloween.startAt && currentDay <= 31) {
+        const currentMonth = new Date().getMonth() + 1
+        if (currentDay >= halloween.startAt && currentDay <= 31 && currentMonth === 10) {
             theme = 'halloween'
             rms_settings.home_banner = halloween.home_banner
         }
@@ -113,22 +114,34 @@ const testConnection = async () => {
 
 // /api/open/{companyId}/general/get-info
 const getCompanyInfo = () => cache_result('getCompanyInfo', async () => {
-    const url = `${rms_settings.server_url}/api/open/${rms_settings.company_id}/general/get-info`
+    const url = `${rms_settings.server_url}/api/company?id=${rms_settings.company_id}`
     const response = await axios.get(url)
     response.data.socials = rms_settings.socials
-    return response.data
+
+    return {
+        companyName: response.data.name,
+        companyColor: response.data.themeColor,
+        companyLogo:  rms_settings.server_url + "/images/" + response.data.logo + ".png",
+        pages: []
+    }
 })
 
 // api/open/{companyId}/products/all
 const getProductList = () => cache_result('getCompanyProducts', async () => {
-    const url = `${rms_settings.server_url}/api/open/${rms_settings.company_id}/products/all`
+    const url = `${rms_settings.server_url}/api/products`
     const response = await axios.get(url)
-    return response.data
+    return response.data.map(x => ({
+        "basePrice": x.basePrice,
+        "description": x.description,
+        "id": x.id,
+        "image": rms_settings.server_url + "/images/" + x.image + ".png",
+        "name": x.name
+    })); response.data
 })
 
 // api/open/{companyId}/orders
 const placeOrder = async (order) => {
-    const url = `${rms_settings.server_url}/api/open/${rms_settings.company_id}/orders`
+    const url = `${rms_settings.server_url}/api/order/`
     const response = await axios.post(url, order)
     return response.data
 }
