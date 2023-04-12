@@ -4,7 +4,7 @@ const FORCE_PRODUCTION_ENV = true;
 
 const settings_dewit = {
     delivery: false,
-    company_id: 1,
+    company_id: 2,
     home_banner: 'https://cdn.discordapp.com/attachments/375936269907263489/1023686750008250368/unknown.png',
     
     special_events: {
@@ -41,7 +41,7 @@ const settings_dewit = {
         `
     },
     
-    server_url: process.env.NODE_ENV === 'production' || FORCE_PRODUCTION_ENV ? 'https://rhino-ms.herokuapp.com' : 'http://localhost:5000',
+    server_url: process.env.NODE_ENV === 'production' || FORCE_PRODUCTION_ENV ? 'https://rmsapi.dewitworstenbrood.nl' : 'http://localhost:5000',
 }
 
 const settings_adriaans = {
@@ -72,7 +72,8 @@ const settings_adriaans = {
     company_id: 3
 }
 
-const rms_settings = settings_adriaans;
+// const rms_settings = settings_dewit;
+const rms_settings = settings_dewit;
 
 const cache = {}
 
@@ -134,10 +135,24 @@ const getProductList = () => cache_result('getCompanyProducts', async () => {
         "basePrice": x.basePrice,
         "description": x.description,
         "id": x.id,
-        "image": rms_settings.server_url + "/images/" + x.image + ".png",
-        "name": x.name
-    })); response.data
-})
+        "image": rms_settings.server_url + x.image,
+        "name": x.name,
+        "category": x.category
+    }));
+});
+
+const getCategories = () => cache_result('getCategories', async () => {
+    const productCategories = (await getProductList()).map(x => x.category);
+    
+    // Get "case insensative unique" product categories
+    const uniqueCategories = [...new Set(productCategories.map(x => ('' + x).toLowerCase()))].map(x => {
+        return productCategories.find(y => ('' + y).toLowerCase() === x);
+    }).filter(x => x !== null);
+
+    console.log(uniqueCategories)
+
+    return uniqueCategories;
+});
 
 // api/open/{companyId}/orders
 const placeOrder = async (order) => {
@@ -151,5 +166,6 @@ export default {
     getProductList,
     testConnection,
     placeOrder,
+    getCategories,
     settings: rms_settings
 }

@@ -3,7 +3,22 @@
     <br />
 
     <div class="products">
+      Zoeken:
       <input type="text" class="form-control mb-3" placeholder="zoeken..." v-model="searchQuery" />
+      
+      <template v-if="categories.length > 0">
+        Filter:
+        <select v-model="categoryFilter" class="form-control">
+          <option :value="null">All</option>
+          <option
+            v-for="category in categories"
+            :value="category"
+          >
+            {{ category }}
+          </option>
+        </select>
+      </template>
+      
       <ProductList :products="filteredProducts" @order="askAddToCart" />
     </div>
 
@@ -51,16 +66,27 @@ export default {
     orderCount: 1,
     orderProduct: null,
     searchQuery: '',
+    categories: [],
+    categoryFilter: null,
   }),
 
   async mounted() {
     this.products = await RMS.getProductList();
+    this.categories = await RMS.getCategories();
   },
 
   computed: {
     filteredProducts() {
       return this.products.filter(product => {
-        return product.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+        const searchQuery = this.searchQuery.toLowerCase();
+        const category = this.categoryFilter;
+
+        console.log(category)
+
+        return (
+          product.name.toLowerCase().includes(searchQuery) &&
+          (category ? product.category?.toLowerCase() === category?.toLowerCase() : true)
+        );
       });
     },
   },
